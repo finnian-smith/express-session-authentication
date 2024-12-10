@@ -1,12 +1,10 @@
 import express from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
-// import pg from "pg";
 import dotenv from "dotenv";
 import { pool } from "./db/pool.js";
-import passport from "passport";
-import crypto from "crypto";
 import expressRouter from "./routes/expressRouter.js";
+import "./config/passport.js";
 
 // load environment variables
 dotenv.config();

@@ -4,7 +4,6 @@ import {
   homepageGet,
   loginFailureGet,
   loginGet,
-  loginPost,
   loginRegister,
   loginSuccessGet,
   logoutGet,
@@ -15,7 +14,13 @@ import {
 const expressRouter = Router();
 
 // POST routes
-expressRouter.post("/login", loginPost);
+expressRouter.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login-failure",
+    successRedirect: "/login-success",
+  })
+);
 
 expressRouter.post("/register", loginRegister);
 
