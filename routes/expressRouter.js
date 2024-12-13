@@ -10,6 +10,7 @@ import {
   protectedRouteGet,
   registerGet,
 } from "../controllers/expressController.js";
+import { isAuth } from "../middleware/authMiddleware.js";
 
 const expressRouter = Router();
 
@@ -31,7 +32,7 @@ expressRouter.get("/login", loginGet);
 
 expressRouter.get("/register", registerGet);
 
-expressRouter.get("/protected-route", protectedRouteGet);
+expressRouter.get("/protected-route", isAuth, protectedRouteGet);
 
 expressRouter.get("/logout", logoutGet);
 

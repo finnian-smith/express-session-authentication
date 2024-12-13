@@ -42,21 +42,16 @@ export const registerGet = async (req, res, next) => {
 };
 
 export const protectedRouteGet = async (req, res, next) => {
-  // develop middleware logic for isAuthenticated
-  if (req.isAuthenticated()) {
-    res.send(
-      '<h1>You are authenticated</h1><p><a href="/logout">Logout and reload</a></p>'
-    );
-  } else {
-    res.send(
-      '<h1>You are not authenticated</h1><p><a href="/login">Login</a></p>'
-    );
-  }
+  res.send("You made it to the route.");
 };
 
 export const logoutGet = async (req, res, next) => {
-  req.logout();
-  res.redirect("/protected-route");
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).json("Error during logout.");
+    }
+    res.redirect("/protected-route");
+  });
 };
 
 export const loginSuccessGet = async (req, res, next) => {
