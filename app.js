@@ -4,6 +4,7 @@ import connectPgSimple from "connect-pg-simple";
 import dotenv from "dotenv";
 import { pool } from "./db/pool.js";
 import expressRouter from "./routes/expressRouter.js";
+import passport from "passport";
 import "./config/passport.js";
 
 // load environment variables
@@ -30,6 +31,17 @@ app.use(
     },
   })
 );
+
+// initialize Passport and use it for handling sessions
+app.use(passport.initialize());
+app.use(passport.session());
+
+// debugging visuals
+app.use((req, res, next) => {
+  console.log("Req Session:", req.session);
+  console.log("Req User:", req.user);
+  next();
+});
 
 // router
 app.use("/", expressRouter);
