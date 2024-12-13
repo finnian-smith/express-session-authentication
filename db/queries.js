@@ -3,7 +3,7 @@ import { pool } from "./pool.js";
 const db = {
   async getUserById(id) {
     try {
-      const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
+      const { rows } = await pool.query(`SELECT * FROM users WHERE id = $1`, [
         id,
       ]);
       return rows[0];
@@ -16,7 +16,7 @@ const db = {
   async getUserByUsername(username) {
     try {
       const { rows } = await pool.query(
-        "SELECT * FROM users WHERE username = $1",
+        `SELECT * FROM users WHERE username = $1`,
         [username]
       );
       return rows[0];
@@ -26,12 +26,12 @@ const db = {
     }
   },
 
-  async createUser(username, hash, salt) {
+  async createUser(username, hash, salt, admin = false) {
     try {
       await pool.query(
-        `INSERT INTO users (username, hash, salt)
-            VALUES ($1, $2, $3)`,
-        [username, hash, salt]
+        `INSERT INTO users (username, hash, salt, admin)
+            VALUES ($1, $2, $3, $4)`,
+        [username, hash, salt, admin]
       );
     } catch (error) {
       console.error("Error creating user:", error);

@@ -6,19 +6,27 @@ dotenv.config();
 
 // POST routes
 export const loginRegister = async (req, res, next) => {
-  const saltHash = genPassword(req.body.password);
+  try {
+    const saltHash = genPassword(req.body.password);
 
-  const salt = saltHash.salt;
-  const hash = saltHash.hash;
+    const salt = saltHash.salt;
+    const hash = saltHash.hash;
+    const admin = false;
 
-  await db.createUser(req.body.username, hash, salt);
+    await db.createUser(req.body.username, hash, salt, admin);
 
-  res.redirect("/login");
+    res.redirect("/login");
+  } catch (error) {
+    console.error("Error registering user:", error);
+    next(error);
+  }
 };
 
 // GET routes
 export const homepageGet = async (req, res, next) => {
-  res.send('<h1>Home</h1><p>Please <a href="/register">register</a></p>');
+  res.send(
+    '<h1>Home</h1><p>Please <a href="/login">login</a> or <a href="/register">register</a></p>'
+  );
 };
 
 export const loginGet = async (req, res, next) => {
@@ -45,13 +53,22 @@ export const protectedRouteGet = async (req, res, next) => {
   res.send("You made it to the route.");
 };
 
+export const adminRouteGet = async (req, res, next) => {
+  res.send("You made it to the admin route.");
+};
+
 export const logoutGet = async (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(500).json("Error during logout.");
-    }
-    res.redirect("/protected-route");
-  });
+  try {
+    req.logout((error) => {
+      if (error) {
+        return res.status(500).json("Error during logout.");
+      }
+      res.redirect("/protected-route");
+    });
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    next(error);
+  }
 };
 
 export const loginSuccessGet = async (req, res, next) => {

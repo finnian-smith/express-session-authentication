@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import {
+  adminRouteGet,
   homepageGet,
   loginFailureGet,
   loginGet,
@@ -10,7 +11,7 @@ import {
   protectedRouteGet,
   registerGet,
 } from "../controllers/expressController.js";
-import { isAuth } from "../middleware/authMiddleware.js";
+import { isAuth, isAdmin } from "../middleware/authMiddleware.js";
 
 const expressRouter = Router();
 
@@ -33,6 +34,8 @@ expressRouter.get("/login", loginGet);
 expressRouter.get("/register", registerGet);
 
 expressRouter.get("/protected-route", isAuth, protectedRouteGet);
+
+expressRouter.get("/admin-route", isAdmin, adminRouteGet);
 
 expressRouter.get("/logout", logoutGet);
 
